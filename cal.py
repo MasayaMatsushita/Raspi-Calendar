@@ -26,6 +26,7 @@ def set_calendar1(cal, btn1):
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
         btn1[i1]["text"] = str1 
+
 def prev_next1( n1 ): 
     global y1 
     global m1 
@@ -41,7 +42,14 @@ def prev_next1( n1 ):
     label2["text"] = m2[m1-1] 
     label3["text"] = str(y1) 
     generate_calendar1(y1, m1) 
-    set_calendar1(cal, btn1) 
+    set_calendar1(cal, btn1)
+    for i1 in range( len(cal) ):
+        if btn1[i1]["text"] == str(now1.day) and y1 == now1.year and m1 == now1.month:
+            btn1[i1]["relief"] = 'solid'
+            btn1[i1]['borderwidth'] = 1
+            break
+        else:
+            btn1[i1]["relief"] = 'flat'
 
 def home():
     m1 = now1.month
@@ -50,7 +58,12 @@ def home():
     label2["text"] = m2[m1-1] 
     label3["text"] = str(y1) 
     generate_calendar1(y1, m1) 
-    set_calendar1(cal, btn1) 
+    set_calendar1(cal, btn1)
+    for i1 in range( len(cal) ):
+        if btn1[i1]["text"] == str(now1.day):
+            btn1[i1]["relief"] = 'solid'
+            break
+
 
 def quit():
     root.destroy()
