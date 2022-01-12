@@ -46,7 +46,7 @@ def prev_next1( n1 ):
     for i1 in range( len(cal) ):
         if btn1[i1]["text"] == str(now1.day) and y1 == now1.year and m1 == now1.month:
             btn1[i1]["relief"] = 'solid'
-            btn1[i1]['borderwidth'] = 1
+            btn1[i1]['borderwidth'] = 2
             break
         else:
             btn1[i1]["relief"] = 'flat'
@@ -305,7 +305,7 @@ bg_color = "#EEEEE8"
 root["bg"] = bg_color
 font_ui = "Yu Gothic"
 
-if root.winfo_screenwidth() < 800 and root.winfo_screenheight() < 480:
+if root.winfo_screenwidth() < 1080 and root.winfo_screenheight() < 720:
     root.attributes('-fullscreen', True)
 else:
     root.resizable(width=False, height=False)
