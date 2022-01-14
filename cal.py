@@ -88,3 +88,4 @@ while True:
     before_eshi_dir_id = eshi_dir_id
     before_time = dt.datetime.now()
     
+    
