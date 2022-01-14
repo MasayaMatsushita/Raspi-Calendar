@@ -11,6 +11,8 @@ dis_d1 = display_time.day
 wd = 0
 cal = [""]*40
 
+eshi_dir_id = 0
+
 month_str = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ] 
 
 
@@ -97,6 +99,12 @@ def cal_setup(root):
         relief='flat' , command=lambda:quit(root) )
     button_quit.place(x=750, y=5, width=30, height=30)
 
+    button_eshi_change = tkinter.Button(root, text=" ", font=(font_ui, 10), 
+        bg=bg_color,
+        borderwidth=0,
+        relief='flat' , command=lambda:eshi_change() )
+    button_eshi_change.place(x=415, y=440, width=30, height=30)
+
     prev_next(0, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell)
 
     return [monitor_month_num, monitor_month_str, monitor_year_str, cal_cell]
@@ -172,9 +180,14 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
         else:
             cal_cell[i1]["relief"] = 'flat'
 
+def eshi_dir_set(eshi_files_name):
+    global eshi_files_num
+    eshi_files_num = len(eshi_files_name)
+
+
+def eshi_change():
+    global eshi_dir_id
+    eshi_dir_id = (eshi_dir_id + 1) % eshi_files_num
 
 def quit(root):
     root.destroy()
-
-
-    
