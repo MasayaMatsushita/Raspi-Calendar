@@ -6,6 +6,7 @@ import time
 import datetime as dt
 
 import func
+import analog_clock
 
 path = os.path.dirname(__file__) + '/pic/'
 files = os.listdir(path)
@@ -30,6 +31,7 @@ def show_image():
     canvas.place(x=20, y=2)
     item = canvas.create_image(1, 1, image=img, anchor=tkinter.NW)
     [monitor_month_num, monitor_month_str, monitor_year_str, cal_cell] = func.cal_setup(root)
+    analog_clock.analog_clock_setup(root)
     
     root.mainloop()
 
@@ -54,7 +56,7 @@ update_time = 0
 before_time = dt.datetime.now()
 while True:
     time.sleep(1)
-    if update_time % 10 == 0:
+    if update_time % (60 * 5) == 0:
         canvas.itemconfig(item, image=img[img_num])
         canvas.place(x=img_coor[img_num][0], y= img_coor[img_num][1])
         img_num = (img_num+1) % len(files_file)
