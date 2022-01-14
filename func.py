@@ -3,6 +3,8 @@ import datetime as dt
 import calendar as cl
 import datetime as dt
 
+import get_googlecal
+
 display_time = dt.datetime.now()
 dis_y1 = display_time.year
 dis_m1 = display_time.month
@@ -124,10 +126,14 @@ def generate_cal(y1, m1):
         i2 = i1 + wd + 1 
         cal[i2] = str1 
 
-def set_cal(cal, cal_cell): 
+def set_cal(cal, cal_cell, year, month):
+    list_day = get_googlecal.get_event_day(year, month)
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
-        cal_cell[i1]["text"] = str1 
+        cal_cell[i1]["text"] = str1
+        if str1 != '':
+            if list_day[int(str1)-1] > 0:
+                cal_cell[i1]['background'] = '#D5FFC8'
 
 def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell): 
     global dis_y1
@@ -143,7 +149,7 @@ def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_ce
     monitor_month_str["text"] = month_str[dis_m1-1] 
     monitor_year_str["text"] = str(dis_y1) 
     generate_cal(dis_y1, dis_m1) 
-    set_cal(cal, cal_cell)
+    set_cal(cal, cal_cell, dis_y1, dis_m1)
 
     now = dt.datetime.now()
     for i1 in range( len(cal) ):
@@ -172,7 +178,7 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
     monitor_month_str["text"] = month_str[m1-1] 
     monitor_year_str["text"] = str(y1) 
     generate_cal(y1, m1) 
-    set_cal(cal, cal_cell)
+    set_cal(cal, cal_cell, dis_y1, dis_m1)
     for i1 in range( len(cal) ):
         if cal_cell[i1]["text"] == str(now.day) and y1 == now.year and m1 == now.month:
             cal_cell[i1]["relief"] = 'solid'

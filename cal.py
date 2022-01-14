@@ -24,7 +24,7 @@ def show_image():
     global monitor_month_num, monitor_month_str, monitor_year_str, cal_cell
 
     root = tkinter.Tk()
-    root.title('lune_calender v1.0')
+    root.title('lune_calender v1.1')
     root.geometry("800x480")
     root['background'] = '#EEEEE8'
 
@@ -74,13 +74,15 @@ while True:
     if before_eshi_dir_id != eshi_dir_id:
         img_num = 0
         update_time = 0
-        
-    if update_time % (1 * 2) == 0:
-        canvas.itemconfig(item, image=img[eshi_dir_id][img_num])
-        canvas.place(x=img_coor[eshi_dir_id][img_num][0], y= img_coor[eshi_dir_id][img_num][1])
-        img_num = (img_num+1) % len(img_coor[eshi_dir_id])
-        update_time = 0
-    update_time += 1
+
+    if len(eshi_name) != 0: 
+        if update_time % (60 * 5) == 0:
+            canvas.itemconfig(item, image=img[eshi_dir_id][img_num])
+            canvas.place(x=img_coor[eshi_dir_id][img_num][0], y= img_coor[eshi_dir_id][img_num][1])
+            img_num = (img_num+1) % len(img_coor[eshi_dir_id])
+            update_time = 0
+        update_time += 1
+
     if before_time.day != dt.datetime.now().day: #フラグ処理にするともっとスマートTODO 
         func.home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell)
     before_eshi_dir_id = eshi_dir_id
