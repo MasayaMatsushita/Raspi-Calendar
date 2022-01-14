@@ -18,7 +18,7 @@ def show_image():
     global monitor_month_num, monitor_month_str, monitor_year_str, cal_cell
 
     root = tkinter.Tk()
-    root.title('lune_calender v0.4')
+    root.title('lune_calender v0.5')
     root.geometry("800x480")
     root['background'] = '#EEEEE8'
 

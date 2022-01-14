@@ -93,7 +93,7 @@ def cal_setup(root):
 
     button_quit = tkinter.Button(root, text=" ", font=(font_ui, 10), 
         bg=bg_color,
-        #borderwidth=1,
+        borderwidth=0,
         relief='flat' , command=lambda:quit(root) )
     button_quit.place(x=750, y=5, width=30, height=30)
 
@@ -167,7 +167,6 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
     set_cal(cal, cal_cell)
     for i1 in range( len(cal) ):
         if cal_cell[i1]["text"] == str(now.day) and y1 == now.year and m1 == now.month:
-            print(y1, m1, now.day)
             cal_cell[i1]["relief"] = 'solid'
             cal_cell[i1]['borderwidth'] = 2
         else:
