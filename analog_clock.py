@@ -128,7 +128,7 @@ class Drawer:
             """
             # 各線の傾きの角度を計算指定リストに追加
             angles = []
-            angles.append(hour * 360 / 12 - 90)
+            angles.append(hour * 360 / 12 + minute * 30 / 60 - 90)
             angles.append(minute * 360 / 60 - 90)
             angles.append(second * 360 / 60 - 90)
             # 線の一方の座標をキャンバスの中心とする
@@ -152,7 +152,7 @@ class Drawer:
         針を表現する線の位置を更新する
         """
         angles = []
-        angles.append(hour * 360 / 12 - 90)
+        angles.append(hour * 360 / 12 + minute * 30 / 60 - 90)
         angles.append(minute * 360 / 60 - 90)
         angles.append(second * 360 / 60 - 90)
         # 線の一方の点の座標は常に時計の中心
@@ -164,6 +164,7 @@ class Drawer:
             x2 = x1 + length * math.cos(math.radians(angle))
             y2 = y1 + length * math.sin(math.radians(angle))
             # coordsメソッドにより描画済みの線の座標を変更する
+
             hand = self.canvas.coords(
                 hand,
                 x1, y1, x2, y2
@@ -183,11 +184,13 @@ class AnalogClock:
         self.draw()
         # １秒後に針を進めるループを開始
         self.master.after(1000, self.update)
+
     def draw(self):
         '''時計の針を描画する'''
         # 時刻を取得し、その時刻に合わせて針を描画する
         hour, minute, second = self.timer.time()
         self.drawer.drawHands(hour, minute, second)
+        
     def update(self):
         '''時計の針を進める'''
         # 時刻を取得し、その時刻に合わせて針を進める

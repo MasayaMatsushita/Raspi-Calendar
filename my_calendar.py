@@ -3,8 +3,6 @@ import datetime as dt
 import calendar as cl
 import datetime as dt
 
-import get_googlecal
-
 display_time = dt.datetime.now()
 dis_y1 = display_time.year
 dis_m1 = display_time.month
@@ -14,40 +12,9 @@ wd = 0
 cal = [""]*40
 
 eshi_dir_id = 0
+quit_flag = False
 
 month_str = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ] 
-
-
-def picture_setup(image):
-    """
-    picture_info
-    引数:
-    JpegImageFile Class
-    戻り値:
-    po_x: 画像左上のx座標
-    po_y: 画像左上のy座標
-    re_w: 画像の横幅(px)
-    re_h: 画像の縦幅(px)
-    """
-    w = image.width # 横幅を取得                                            
-    h = image.height # 縦幅を取得
-    if int(h * (397/w)) > 477:
-        #縦幅が長いときのリサイズ処理
-        re_w = int(w * (477/h))
-        re_h = int(h * (477/h))
-    else:
-        #横幅が長いときのリサイズ処理
-        re_w = int(w * (397/w))
-        re_h = int(h * (397/w))
-    #画像配置を中央にする処理
-    if re_w == 397:
-        po_x = 0
-        po_y = int((480 - re_h) / 2)
-    else:
-        po_x = int((400 - re_w) / 2)
-        po_y = 0
-    return [po_x, po_y, re_w, re_h]
-
 
 def cal_setup(root):
     bg_color = "#EEEEE8"
@@ -86,6 +53,7 @@ def cal_setup(root):
             y2 = 150 + 47 * ver 
             cal_cell[cal+7*ver].place(x=x2, y=y2, width=45, height=45)
 
+    
     button_prev = tkinter.Button(root, text="prev", font=(font_ui, 10), bg="#D0D0D0", relief='flat', command=lambda:prev_next(-1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
     button_prev.place(x=530, y=440, width=60, height=30)
 
@@ -94,18 +62,6 @@ def cal_setup(root):
 
     button_home = tkinter.Button(root, text="home", font=(font_ui, 10), bg="#D0D0D0", relief='flat', command=lambda:home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
     button_home.place(x=610, y=440, width=60, height=30)
-
-    button_quit = tkinter.Button(root, text=" ", font=(font_ui, 10), 
-        bg=bg_color,
-        borderwidth=0,
-        relief='flat' , command=lambda:quit(root) )
-    button_quit.place(x=750, y=5, width=30, height=30)
-
-    button_eshi_change = tkinter.Button(root, text=" ", font=(font_ui, 10), 
-        bg=bg_color,
-        borderwidth=0,
-        relief='flat' , command=lambda:eshi_change() )
-    button_eshi_change.place(x=415, y=440, width=30, height=30)
 
     prev_next(0, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell)
 
@@ -126,14 +82,10 @@ def generate_cal(y1, m1):
         i2 = i1 + wd + 1 
         cal[i2] = str1 
 
-def set_cal(cal, cal_cell, year, month):
-    list_day = get_googlecal.get_event_day(year, month)
+def set_cal(cal, cal_cell): 
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
-        cal_cell[i1]["text"] = str1
-        if str1 != '':
-            if list_day[int(str1)-1] > 0:
-                cal_cell[i1]['background'] = '#D5FFC8'
+        cal_cell[i1]["text"] = str1 
 
 def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell): 
     global dis_y1
@@ -149,7 +101,7 @@ def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_ce
     monitor_month_str["text"] = month_str[dis_m1-1] 
     monitor_year_str["text"] = str(dis_y1) 
     generate_cal(dis_y1, dis_m1) 
-    set_cal(cal, cal_cell, dis_y1, dis_m1)
+    set_cal(cal, cal_cell)
 
     now = dt.datetime.now()
     for i1 in range( len(cal) ):
@@ -178,7 +130,7 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
     monitor_month_str["text"] = month_str[m1-1] 
     monitor_year_str["text"] = str(y1) 
     generate_cal(y1, m1) 
-    set_cal(cal, cal_cell, dis_y1, dis_m1)
+    set_cal(cal, cal_cell)
     for i1 in range( len(cal) ):
         if cal_cell[i1]["text"] == str(now.day) and y1 == now.year and m1 == now.month:
             cal_cell[i1]["relief"] = 'solid'
@@ -186,14 +138,4 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
         else:
             cal_cell[i1]["relief"] = 'flat'
 
-def eshi_dir_set(eshi_files_name):
-    global eshi_files_num
-    eshi_files_num = len(eshi_files_name)
 
-
-def eshi_change():
-    global eshi_dir_id
-    eshi_dir_id = (eshi_dir_id + 1) % eshi_files_num
-
-def quit(root):
-    root.destroy()
