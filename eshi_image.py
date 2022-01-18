@@ -41,8 +41,8 @@ class Drawer:
     def initSetting(self, master):
         '''画像表示に必要な設定'''
         self.master = master
-        self.path = os.path.dirname(os.path.abspath(__file__)) + '/pic/'
-        # path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/pic/'
+        # self.path = os.path.dirname(os.path.abspath(__file__)) + '/pic/'
+        self.path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/pic/'
         self.list_dir = os.listdir(self.path)
         self.eshi_name = [f for f in self.list_dir if os.path.isdir(os.path.join(self.path, f))]
         self.eshi_files_name = []
@@ -94,14 +94,14 @@ class EshiImage:
             relief='flat' , command=lambda:eshi_change(self))
         button_eshi_change.place(x=415, y=440, width=30, height=30)
 
-        self.master.after(2000, self.update)
+        self.master.after(1000 * 60 * 5, self.update)
 
     def update(self):
         '''画像を更新する'''
         self.drawer.update()
-        self.master.after(2000, self.update)
+        self.master.after(1000 * 60 * 5, self.update)
 
 def eshi_change(self):
-    print(self.drawer.eshi_id)
     self.drawer.image_id = 0
     self.drawer.eshi_id = (self.drawer.eshi_id+1) % len(self.drawer.eshi_name)
+    self.master.after(100, self.update)
