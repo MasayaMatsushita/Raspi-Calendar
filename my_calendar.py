@@ -1,11 +1,7 @@
-from operator import ge
 import tkinter
 import datetime as dt
 import calendar as cl
 import datetime as dt
-from webbrowser import get
-
-import get_googlecal
 
 display_time = dt.datetime.now()
 dis_y1 = display_time.year
@@ -86,28 +82,10 @@ def generate_cal(y1, m1):
         i2 = i1 + wd + 1 
         cal[i2] = str1 
 
-def set_cal(cal, cal_cell, year, month): 
+def set_cal(cal, cal_cell): 
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
-        cal_cell[i1]["text"] = str1
-
-    event_day_list = get_googlecal.get_event_day(year, month)
-    list_data = []
-    for i in range(len(event_day_list)):
-        if event_day_list[i] > 0:
-            list_data.append(str(i+1))
-    for ver in range( 6 ): 
-        for cal in range( 7 ): 
-            if cal == 0: 
-                bg1 = "#FFF0F0" 
-            elif cal == 6: 
-                bg1 = "#F6F0FF" 
-            else: 
-                bg1 = "#FFFFFF"
-
-            if cal_cell[cal+7*ver]["text"] in list_data :
-                bg1 = "#c1ffc1"
-            cal_cell[cal+7*ver]["bg"] = bg1
+        cal_cell[i1]["text"] = str1 
 
 def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell): 
     global dis_y1
@@ -123,7 +101,7 @@ def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_ce
     monitor_month_str["text"] = month_str[dis_m1-1] 
     monitor_year_str["text"] = str(dis_y1) 
     generate_cal(dis_y1, dis_m1) 
-    set_cal(cal, cal_cell, dis_y1, dis_m1)
+    set_cal(cal, cal_cell)
 
     now = dt.datetime.now()
     for i1 in range( len(cal) ):
@@ -152,7 +130,7 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
     monitor_month_str["text"] = month_str[m1-1] 
     monitor_year_str["text"] = str(y1) 
     generate_cal(y1, m1) 
-    set_cal(cal, cal_cell, y1, m1)
+    set_cal(cal, cal_cell)
     for i1 in range( len(cal) ):
         if cal_cell[i1]["text"] == str(now.day) and y1 == now.year and m1 == now.month:
             cal_cell[i1]["relief"] = 'solid'

@@ -2,8 +2,6 @@ from datetime import datetime as dt
 import calendar
 import googleapiclient.discovery
 import google.auth
-import os
-import sys
 
 # 編集スコープの設定(今回は読み書き両方OKの設定)
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -11,9 +9,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 calendar_id = 'masaya.sj.gm@gmail.com'
     
 # 認証ファイルを使用して認証用オブジェクトを作成
-# path = os.path.dirname(os.path.abspath(__file__))
-path = os.path.dirname(os.path.abspath(sys.argv[0]))
-gapi_creds = google.auth.load_credentials_from_file(path+'/raspi-calendar-338212-acbf00829c2d.json', SCOPES)[0]
+gapi_creds = google.auth.load_credentials_from_file('raspi-calendar-338212-acbf00829c2d.json', SCOPES)[0]
     
 # 認証用オブジェクトを使用してAPIを呼び出すためのオブジェクト作成
 service = googleapiclient.discovery.build('calendar', 'v3', credentials=gapi_creds)
@@ -33,6 +29,7 @@ def get_event_day(year, month):
 
     # Pick up only start time, end time and summary info
     events = events_result.get('items', [])
+    print(len(events))
     # Generate output text
     for event in events:
         if event['start'].get('dateTime') != None:
@@ -55,3 +52,5 @@ def get_event_day(year, month):
                 event_day[i] += 1
 
     return event_day    
+    # for i in range(len(event_day)):
+    #     print(i+1, event_day[i])
