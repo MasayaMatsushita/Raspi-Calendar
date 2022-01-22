@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
+import random
 import tkinter
 from PIL import Image, ImageTk
 
@@ -42,7 +44,7 @@ class Drawer:
         '''画像表示に必要な設定'''
         self.master = master
         self.path = os.path.dirname(os.path.abspath(__file__)) + '/pic/'
-        # path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/pic/'
+        # self.path = os.path.dirname(os.path.abspath(sys.argv[0])) + '/pic/'
         self.list_dir = os.listdir(self.path)
         self.eshi_name = [f for f in self.list_dir if os.path.isdir(os.path.join(self.path, f))]
         self.eshi_files_name = []
@@ -71,11 +73,11 @@ class Drawer:
         self.canvas = tkinter.Canvas(bg = "#EEEEE8", width=398, height=478, highlightthickness=0)
         self.canvas.place(x=20, y=2)
         self.eshi_id = 0
-        self.image_id = 0
+        self.image_id = random.randrange(len(self.img[self.eshi_id]))
         self.item = self.canvas.create_image(1, 1, image=self.img[self.eshi_id][self.image_id], anchor=tkinter.NW)
 
     def update(self):
-        self.image_id = (self.image_id +1) % len(self.img[self.eshi_id])
+        self.image_id = random.randrange(len(self.img[self.eshi_id]))
         self.canvas.itemconfig(self.item, image=self.img[self.eshi_id][self.image_id])
         self.canvas.place(x=self.img_coor[self.eshi_id][self.image_id][0], y= self.img_coor[self.eshi_id][self.image_id][1])
 
@@ -94,14 +96,15 @@ class EshiImage:
             relief='flat' , command=lambda:eshi_change(self))
         button_eshi_change.place(x=415, y=440, width=30, height=30)
 
-        self.master.after(2000, self.update)
+        self.master.after(1000 * 60 * 3, self.update)
 
     def update(self):
         '''画像を更新する'''
         self.drawer.update()
-        self.master.after(2000, self.update)
+        self.master.after(1000 * 60 * 3, self.update)
+
 
 def eshi_change(self):
-    print(self.drawer.eshi_id)
-    self.drawer.image_id = 0
     self.drawer.eshi_id = (self.drawer.eshi_id+1) % len(self.drawer.eshi_name)
+    self.drawer.image_id = 0
+    self.drawer.update()

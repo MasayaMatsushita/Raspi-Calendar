@@ -1,4 +1,4 @@
-# -*- coding: uTf-8 -*-
+# -*- coding: utf-8 -*-
 import tkinter
 
 import my_calendar

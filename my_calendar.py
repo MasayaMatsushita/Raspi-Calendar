@@ -1,7 +1,12 @@
+# -*- coding: utf-8 -*-
+from operator import ge
 import tkinter
 import datetime as dt
 import calendar as cl
 import datetime as dt
+from webbrowser import get
+
+import get_googlecal
 
 display_time = dt.datetime.now()
 dis_y1 = display_time.year
@@ -18,14 +23,18 @@ month_str = ["January", "February", "March", "April", "May", "June", "July", "Au
 
 def cal_setup(root):
     bg_color = "#EEEEE8"
+    fg_color = "#000000"
     font_ui = "Yu Gothic"
     monitor_month_num = tkinter.Label(font=(font_ui, 26),anchor=tkinter.CENTER, width=2)
+    monitor_month_num["fg"] = fg_color
     monitor_month_num["bg"] = bg_color
     monitor_month_num.place(x=425, y=78) 
     monitor_month_str = tkinter.Label(font=(font_ui, 10),anchor=tkinter.W, width=10)
+    monitor_month_str["fg"] = fg_color
     monitor_month_str["bg"] = bg_color 
     monitor_month_str.place(x=495, y=83)
     monitor_year_str = tkinter.Label(font=(font_ui, 12),anchor=tkinter.W, width=10)
+    monitor_year_str["fg"] = fg_color
     monitor_year_str["bg"] = bg_color 
     monitor_year_str.place(x=495, y=105)
 
@@ -34,6 +43,7 @@ def cal_setup(root):
     for ver in range(len(week_str)): 
         monitor_week[ver] = tkinter.Label(text=week_str[ver], font=(font_ui, 8), anchor=tkinter.CENTER, width=10)
         monitor_week[ver]["bg"] = bg_color
+        monitor_week[ver]["fg"] = fg_color
         monitor_week[ver].place(x=405+47*ver, y=130)
 
     cal_cell = [""]*42 
@@ -54,13 +64,13 @@ def cal_setup(root):
             cal_cell[cal+7*ver].place(x=x2, y=y2, width=45, height=45)
 
     
-    button_prev = tkinter.Button(root, text="prev", font=(font_ui, 10), bg="#D0D0D0", relief='flat', command=lambda:prev_next(-1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
-    button_prev.place(x=530, y=440, width=60, height=30)
+    button_prev = tkinter.Button(root, text="<", font=(font_ui, 10), borderwidth=0, bg="#D0D0D0", fg=fg_color, relief='flat', command=lambda:prev_next(-1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
+    button_prev.place(x=560, y=440, width=30, height=30)
 
-    button_next = tkinter.Button(root, text="next", font=(font_ui, 10), bg="#D0D0D0", relief='flat', command=lambda:prev_next(1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
-    button_next.place(x=690, y=440, width=60, height=30)
+    button_next = tkinter.Button(root, text=">", font=(font_ui, 10), borderwidth=0, bg="#D0D0D0", fg=fg_color, relief='flat', command=lambda:prev_next(1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
+    button_next.place(x=690, y=440, width=30, height=30)
 
-    button_home = tkinter.Button(root, text="home", font=(font_ui, 10), bg="#D0D0D0", relief='flat', command=lambda:home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
+    button_home = tkinter.Button(root, text="home", font=(font_ui, 10), borderwidth=0, bg="#D0D0D0", fg=fg_color, relief='flat', command=lambda:home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell) )
     button_home.place(x=610, y=440, width=60, height=30)
 
     prev_next(0, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell)
@@ -82,10 +92,28 @@ def generate_cal(y1, m1):
         i2 = i1 + wd + 1 
         cal[i2] = str1 
 
-def set_cal(cal, cal_cell): 
+def set_cal(cal, cal_cell, year, month): 
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
-        cal_cell[i1]["text"] = str1 
+        cal_cell[i1]["text"] = str1
+
+    event_day_list = get_googlecal.get_event_day(year, month)
+    list_data = []
+    for i in range(len(event_day_list)):
+        if event_day_list[i] > 0:
+            list_data.append(str(i+1))
+    for ver in range( 6 ): 
+        for cal in range( 7 ): 
+            if cal == 0: 
+                bg1 = "#FFF0F0" 
+            elif cal == 6: 
+                bg1 = "#F6F0FF" 
+            else: 
+                bg1 = "#FFFFFF"
+
+            if cal_cell[cal+7*ver]["text"] in list_data :
+                bg1 = "#c1ffc1"
+            cal_cell[cal+7*ver]["bg"] = bg1
 
 def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_cell): 
     global dis_y1
@@ -101,7 +129,7 @@ def prev_next(n1, monitor_month_num, monitor_month_str, monitor_year_str, cal_ce
     monitor_month_str["text"] = month_str[dis_m1-1] 
     monitor_year_str["text"] = str(dis_y1) 
     generate_cal(dis_y1, dis_m1) 
-    set_cal(cal, cal_cell)
+    set_cal(cal, cal_cell, dis_y1, dis_m1)
 
     now = dt.datetime.now()
     for i1 in range( len(cal) ):
@@ -130,7 +158,7 @@ def home(monitor_month_num, monitor_month_str, monitor_year_str, cal_cell):
     monitor_month_str["text"] = month_str[m1-1] 
     monitor_year_str["text"] = str(y1) 
     generate_cal(y1, m1) 
-    set_cal(cal, cal_cell)
+    set_cal(cal, cal_cell, y1, m1)
     for i1 in range( len(cal) ):
         if cal_cell[i1]["text"] == str(now.day) and y1 == now.year and m1 == now.month:
             cal_cell[i1]["relief"] = 'solid'
