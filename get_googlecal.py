@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime as dt
 import calendar
 import googleapiclient.discovery
@@ -11,8 +12,8 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 calendar_id = 'masaya.sj.gm@gmail.com'
     
 # 認証ファイルを使用して認証用オブジェクトを作成
-# path = os.path.dirname(os.path.abspath(__file__))
-path = os.path.dirname(os.path.abspath(sys.argv[0]))
+path = os.path.dirname(os.path.abspath(__file__))
+# path = os.path.dirname(os.path.abspath(sys.argv[0]))
 gapi_creds = google.auth.load_credentials_from_file(path+'/raspi-calendar-338212-acbf00829c2d.json', SCOPES)[0]
     
 # 認証用オブジェクトを使用してAPIを呼び出すためのオブジェクト作成

@@ -1,4 +1,4 @@
-# -*- coding: uTf-8 -*-
+# -*- coding: utf-8 -*-
 import tkinter
 
 import my_calendar
@@ -17,7 +17,7 @@ else:
 
 eshi_image.EshiImage(root)
 analog_clock.analog_clock_setup(root)
-my_calendar.cal_setup(root)
+my_calendar.Calendar(root)
 
 
 bg_color = "#EEEEE8"
