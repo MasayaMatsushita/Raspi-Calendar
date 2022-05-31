@@ -6,8 +6,7 @@ import calendar as cl
 import datetime as dt
 from webbrowser import get
 
-
-from ping3 import ping, verbose_ping
+import get_googlecal
 
 display_time = dt.datetime.now()
 dis_y1 = display_time.year
@@ -48,11 +47,8 @@ def set_cal(cal, cal_cell, year, month):
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
         cal_cell[i1]["text"] = str1
-        
-    event_day_list = []
-    if ping("google.com") != False:
-        import get_googlecal
-        event_day_list = get_googlecal.get_event_day(year, month)
+
+    event_day_list = get_googlecal.get_event_day(year, month)
     list_data = []
     for i in range(len(event_day_list)):
         if event_day_list[i] > 0:
