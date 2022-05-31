@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from operator import ge
 import tkinter
 import datetime as dt
@@ -47,8 +48,12 @@ def set_cal(cal, cal_cell, year, month):
     for i1 in range( len(cal) ): 
         str1 = cal[i1] 
         cal_cell[i1]["text"] = str1
-
-    event_day_list = get_googlecal.get_event_day(year, month)
+        
+    event_day_list = []
+    #pingが通るか and googleapiに接続するjsonファイルが存在するか
+    if ping("google.com") != False and os.path.isfile(os.path.dirname(os.path.abspath(__file__))+'/raspi-calendar.json'):
+        import get_googlecal
+        event_day_list = get_googlecal.get_event_day(year, month)
     list_data = []
     for i in range(len(event_day_list)):
         if event_day_list[i] > 0:
