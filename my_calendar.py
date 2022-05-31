@@ -7,8 +7,7 @@ import calendar as cl
 import datetime as dt
 from webbrowser import get
 
-
-from ping3 import ping, verbose_ping
+import get_googlecal
 
 display_time = dt.datetime.now()
 dis_y1 = display_time.year
